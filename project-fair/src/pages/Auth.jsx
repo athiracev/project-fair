@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Row, Col } from 'react-bootstrap'
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { toast } from 'react-toastify'
 import { userRegister,userLogin } from '../services/allApis';
 import {useNavigate} from 'react-router-dom'
+import ProjectCard from '../components/ProjectCard';
 
 
 
@@ -16,6 +17,8 @@ function Auth() {
         username: "", password: "", email: ""
     })
     console.log(data)
+
+ 
 
     const changeStatus = () => {
         SetStatus(!status)
@@ -53,12 +56,17 @@ function Auth() {
         }else{
             const result = await userLogin({email,password})
             console.log(result)
-            console.log(result.data.token)
-            console.log(result.data.username,"hhhh")
-            sessionStorage.setItem("token",result.data.token)
-            sessionStorage.setItem("username",result.data.username)
-            toast.success("Login Success")
-            navigate('/')
+            if(result.status==201){
+                // console.log(result.data.token)
+                // console.log(result.data.username,"hhhh")
+                sessionStorage.setItem("token",result.data.token)
+                sessionStorage.setItem("username",result.data.username)
+                toast.success("Login Success")
+                navigate('/')
+            }else{
+                toast.error(result.response.data)
+            }
+           
         }
     }
 
