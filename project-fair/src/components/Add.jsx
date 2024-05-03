@@ -46,7 +46,7 @@ function Add() {
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Add project</Modal.Title>
+          <Modal.Title>ADD PROJECT</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div>
