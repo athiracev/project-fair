@@ -4,11 +4,14 @@ import Modal from 'react-bootstrap/Modal';
 import { Row, Col } from 'react-bootstrap';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
+import { toast } from 'react-toastify'
+import { addProject } from '../services/allApis';
+
 
 function Add() {
 
   const [show, setShow] = useState(false);
-
+const [preview,setPreview]=useState('')
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [projectData, setProjectData] = useState({
@@ -16,19 +19,58 @@ function Add() {
   })
   console.log(projectData)
 
-  const [imageStatus,setImageStatus]=useState(false)
+  const [imageStatus, setImageStatus] = useState(false)
 
   useEffect(() => {
-    if(projectData.projectImage.type=='image/jpg' || projectData.projectImage.type=='image/jpeg' || projectData.projectImage.type=='image/png'){
-        console.log('image added')
-        setImageStatus(false)
-    }else{
+    if (projectData.projectImage.type == 'image/jpg' || projectData.projectImage.type == 'image/jpeg' || projectData.projectImage.type == 'image/png') {
+      console.log('image added')
+      setImageStatus(false)
+      setPreview(URL.createObjectURL(projectData.projectImage))
+
+    } else {
       console.log("Only JPEG, PNG images are allowed")
       setImageStatus(true)
+      setPreview("")
 
     }
 
-  },[projectData.projectImage])
+  }, [projectData.projectImage])
+
+
+  const handleProject = async () => {
+
+    const { title, overview, languages, github, demo, projectImage } = projectData
+    console.log(projectData)
+    if (!title || !overview || !languages || !github || !demo || !projectImage) {
+      toast.warning("invalid input !! Enter valid input data")
+
+    } else {
+      const formData = new FormData()
+      formData.append("title", title)
+      formData.append("overview", overview)
+      formData.append("languages", languages)
+      formData.append("github", github)
+      formData.append("demo", demo)
+      formData.append("image", projectImage)
+
+      const token=sessionStorage.getItem("token")
+      const reqHeader = {
+        "Content-Type": "multipart/form-data",
+        "Authorization": `Bearer ${token}`
+      }
+      const result = await addProject(formData, reqHeader)
+      if (result.status == 200) {
+        toast.success("Project added successfully")
+        setProjectData({
+          title: "", overview: "", languages: "", github: "", demo: "", projectImage: ""
+        })
+        handleClose()
+
+      } else {
+        toast.error(result.response.data)
+      }
+    }
+  }
 
 
 
@@ -58,7 +100,7 @@ function Add() {
                 </label>
                 {
                   imageStatus &&
-                <p className='text-danger'>Only JPEG, PNG images are allowed</p>
+                  <p className='text-danger'>Only JPEG, PNG images are allowed</p>
 
                 }
               </Col>
@@ -69,7 +111,7 @@ function Add() {
                     label="Title"
                   // className="mb-3"
                   >
-                    <Form.Control type="text" placeholder="project title" onChange={(e) => { setProjectData({ ...projectData, title: e.target.files[0] }) }} />
+                    <Form.Control type="text" placeholder="project title" onChange={(e) => { setProjectData({ ...projectData, title: e.target.value }) }} />
                   </FloatingLabel>
                   <FloatingLabel controlId="overviewinp" label="Overview">
                     <Form.Control type="text" placeholder="Overview" onChange={(e) => { setProjectData({ ...projectData, overview: e.target.value }) }} />
@@ -95,7 +137,7 @@ function Add() {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary">Add</Button>
+          <Button variant="primary" onClick={handleProject}>Add</Button>
         </Modal.Footer>
       </Modal >
 
