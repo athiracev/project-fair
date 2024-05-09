@@ -1,20 +1,69 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Header from '../components/Header'
-import {Row,Col} from 'react-bootstrap'
+import { Row, Col } from 'react-bootstrap'
 import ProjectCart from '../components/ProjectCard'
+import { allProjects } from '../services/allApis'
 
 function Project() {
+  const [projects, setProjects] = useState([])
+  const [logStatus, setLogStatus] = useState(false);
+
+
+
+  useEffect(() => {
+    if (sessionStorage.getItem('token')) {
+      getData()
+      setLogStatus(true)
+
+    } else {
+      console.log("Login ")
+      setLogStatus(false)
+    }
+
+  }, [])
+  console.log(projects)
+
+  const getData = async () => {
+
+    const header = { "Authorization": `Bearer ${sessionStorage.getItem('token')}` }
+
+    const result = await allProjects(header)
+    console.log(result)
+    if (result.status == 200) {
+      setProjects(result.data)
+    }
+    else {
+      console.log(result.response.data)
+    }
+
+  }
+
+
+
   return (
     <div>
-      <Header status={true}/>
+      <Header status={true} />
 
       <div className='p-5'>
         <h1>All Projects</h1>
-        <Row>
-          <Col>
-          <ProjectCart  />
-          </Col>
-        </Row>
+        {logStatus?
+         <Row>
+
+         {projects?.length > 0 ?
+         projects?.map(item=>(
+           <Col>
+
+           <ProjectCart pro={item} />
+         </Col>
+         ))  
+         :
+          <h2>No project available</h2>
+         }
+
+       </Row>:
+       <h2 className='text-center text-warning'>Please login first</h2>
+        }
+       
 
       </div>
     </div>

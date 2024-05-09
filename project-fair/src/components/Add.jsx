@@ -35,6 +35,7 @@ const [preview,setPreview]=useState('')
     }
 
   }, [projectData.projectImage])
+  console.log(preview)
 
 
   const handleProject = async () => {
@@ -57,6 +58,7 @@ const [preview,setPreview]=useState('')
       const reqHeader = {
         "Content-Type": "multipart/form-data",
         "Authorization": `Bearer ${token}`
+        
       }
       const result = await addProject(formData, reqHeader)
       if (result.status == 200) {
@@ -96,7 +98,7 @@ const [preview,setPreview]=useState('')
               <Col>
                 <label>
                   <input type="file" onChange={(e) => { setProjectData({ ...projectData, projectImage: e.target.files[0] }) }} style={{ display: 'none' }} />
-                  <img className='img-fluid' src="https://th.bing.com/th/id/OIP.vQ5xzow_w7s5NGLSHfe9ogHaGp?rs=1&pid=ImgDetMain" alt="" />
+                  <img className='img-fluid' src={preview?preview:"https://th.bing.com/th/id/OIP.vQ5xzow_w7s5NGLSHfe9ogHaGp?rs=1&pid=ImgDetMain"} alt="" />
                 </label>
                 {
                   imageStatus &&
