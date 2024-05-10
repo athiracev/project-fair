@@ -1,36 +1,29 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useContext } from 'react'
 import Header from '../components/Header'
 import { Row, Col } from 'react-bootstrap'
 import Add from '../components/Add'
 import Edit from '../components/Edit'
 import Profile from '../components/Profile'
 import { userProjects } from '../services/allApis'
-import {useNavigate} from 'react-router-dom'
-
+import { addProjectResponseContext } from '../Context_Api/Contextapis'
 
 function Dashboard() {
   
-
+const{addProjectResponse,setAddProjectResponse}=useContext(addProjectResponseContext)
 
   const [user, setUser] = useState('')
   const [userpro, setUserPro] = useState([])
-  const navigate= useNavigate()
-
+6
   useEffect(() => {
     const user= sessionStorage.getItem("username")
     setUser(user)
     if(sessionStorage.getItem("token")){
       getUserProject()
 
-    }else{
-      console.log("Login First")
-      navigate('/login')
-
     }
-    
 
-
-  }, [])
+  
+  }, [addProjectResponse])
   // console.log(user)
 
 
@@ -66,7 +59,10 @@ function Dashboard() {
               <Add />
               
 
-           {userpro?.map(item=>(
+           {
+            userpro.length>0?
+
+           userpro?.map(item=>(
                <div className='d-flex justify-content-between shadow mb-3 p-5 rounded'>
 
                <h4>{item.title}</h4>
@@ -83,7 +79,8 @@ function Dashboard() {
 
 
              </div>
-           ))}
+           )):
+           <h3 className='text-center'>No projects Available</h3>}
             </div>
 
           </Col >

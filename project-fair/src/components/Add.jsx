@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Row, Col } from 'react-bootstrap';
@@ -6,12 +6,14 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { toast } from 'react-toastify'
 import { addProject } from '../services/allApis';
-
+import { addProjectResponseContext } from '../Context_Api/Contextapis';
 
 function Add() {
 
+  const { addProjectResponse, setAddProjectResponse } = useContext(addProjectResponseContext)
+  console.log(useContext(addProjectResponse))
   const [show, setShow] = useState(false);
-const [preview,setPreview]=useState('')
+  const [preview, setPreview] = useState('')
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [projectData, setProjectData] = useState({
@@ -54,11 +56,11 @@ const [preview,setPreview]=useState('')
       formData.append("demo", demo)
       formData.append("image", projectImage)
 
-      const token=sessionStorage.getItem("token")
+      const token = sessionStorage.getItem("token")
       const reqHeader = {
         "Content-Type": "multipart/form-data",
         "Authorization": `Bearer ${token}`
-        
+
       }
       const result = await addProject(formData, reqHeader)
       if (result.status == 200) {
@@ -67,6 +69,7 @@ const [preview,setPreview]=useState('')
           title: "", overview: "", languages: "", github: "", demo: "", projectImage: ""
         })
         handleClose()
+        setAddProjectResponse(result)
 
       } else {
         toast.error(result.response.data)
@@ -98,7 +101,7 @@ const [preview,setPreview]=useState('')
               <Col>
                 <label>
                   <input type="file" onChange={(e) => { setProjectData({ ...projectData, projectImage: e.target.files[0] }) }} style={{ display: 'none' }} />
-                  <img className='img-fluid' src={preview?preview:"https://th.bing.com/th/id/OIP.vQ5xzow_w7s5NGLSHfe9ogHaGp?rs=1&pid=ImgDetMain"} alt="" />
+                  <img className='img-fluid' src={preview ? preview : "https://th.bing.com/th/id/OIP.vQ5xzow_w7s5NGLSHfe9ogHaGp?rs=1&pid=ImgDetMain"} alt="" />
                 </label>
                 {
                   imageStatus &&
