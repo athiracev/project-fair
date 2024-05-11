@@ -12,14 +12,16 @@ function Add() {
 
   const { addProjectResponse, setAddProjectResponse } = useContext(addProjectResponseContext)
   console.log(useContext(addProjectResponse))
-  const [show, setShow] = useState(false);
-  const [preview, setPreview] = useState('')
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
   const [projectData, setProjectData] = useState({
     title: "", overview: "", languages: "", github: "", demo: "", projectImage: ""
   })
   console.log(projectData)
+  
+  const [show, setShow] = useState(false);
+  const [preview, setPreview] = useState('')
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
 
   const [imageStatus, setImageStatus] = useState(false)
 

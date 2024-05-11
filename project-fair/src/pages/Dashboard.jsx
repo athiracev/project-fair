@@ -19,10 +19,7 @@ const{addProjectResponse,setAddProjectResponse}=useContext(addProjectResponseCon
     setUser(user)
     if(sessionStorage.getItem("token")){
       getUserProject()
-
     }
-
-  
   }, [addProjectResponse])
   // console.log(user)
 
@@ -41,7 +38,6 @@ const{addProjectResponse,setAddProjectResponse}=useContext(addProjectResponseCon
       console.log(result.response.data)
 
     }
-
   }
   // console.log(userpro,"userprojects")
   
@@ -53,7 +49,8 @@ const{addProjectResponse,setAddProjectResponse}=useContext(addProjectResponseCon
         <Row>
           <Col sm={12} md={8} className='p-3'>
             <h3>My Projects</h3>
-            <h4 className='text-center text-success' >Welcome {user}</h4>
+            <h3 className='text-center text-success' >Hi <span >{user}</span>  Welcome Back</h3>
+            <i className="fa-duotone fa-face-smile" style={{"--fa-primary-color": "#e1d123", "--fa-secondary-color": "#e1d123"}} />
 
             <div className='border border- p-4'>
               <Add />
@@ -70,7 +67,7 @@ const{addProjectResponse,setAddProjectResponse}=useContext(addProjectResponseCon
                  <a href={item.github} className='btn me-3'>
                    <i className="fa-brands fa-github" style={{ color: "#3b69ba", }} />
                  </a>
-                 <Edit />
+                 <Edit project={item} />
                  <button className='btn me-3'>
                    <i className="fa-solid fa-trash" style={{ color: "#c3223b", }} />
 
