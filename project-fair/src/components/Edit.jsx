@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Row, Col } from 'react-bootstrap';
@@ -13,9 +13,9 @@ import { editProjectResponseContext } from '../Context_Api/Contextapis';
 function Edit({ project }) {
 
     console.log(project)
- 
-    const {editProjectResponse, setEditProjectResponse} =useContext(editProjectResponseContext)
-    
+
+    const { editProjectResponse, setEditProjectResponse } = useContext(editProjectResponseContext)
+
     const [projectData, setProjectData] = useState({
         id: project._id, title: project.title, overview: project.overview, language: project.languages, github: project.github, demo: project.demo, projectImage: ""
     })
@@ -24,7 +24,7 @@ function Edit({ project }) {
     const [imageStatus, setImageStatus] = useState(false)
     const [preview, setPreview] = useState('')
 
-    
+
 
     useEffect(() => {
         if (projectData.projectImage.type == 'image/jpg' || projectData.projectImage.type == 'image/jpeg' || projectData.projectImage.type == 'image/png') {
@@ -40,7 +40,7 @@ function Edit({ project }) {
     const handleUpdate = async () => {
         console.log(projectData)
         const { title, overview, language, github, demo } = projectData
-        if (!title || !overview || !language || !github || !demo ) {
+        if (!title || !overview || !language || !github || !demo) {
             toast.warning("invalid input !! Enter valid input data")
 
         } else {
@@ -50,46 +50,40 @@ function Edit({ project }) {
             formData.append("language", language)
             formData.append("github", github)
             formData.append("demo", demo)
-            preview?formData.append("image", projectData.projectImage):formData.append("image",project.image)
+            preview ? formData.append("image", projectData.projectImage) : formData.append("image", project.image)
 
             const token = sessionStorage.getItem("token")
 
-            if(preview){
+            if (preview) {
                 const reqHeader = {
                     "Content-Type": "multipart/form-data",
                     "Authorization": `Bearer ${token}`
-    
+
                 }
-                const result = await editProject(projectData.id,formData,reqHeader)
-                if(result.status==200){
+                const result = await editProject(projectData.id, formData, reqHeader)
+                if (result.status == 200) {
                     toast.success(`${projectData.title} updated successfully`)
                     handleClose()
                     setEditProjectResponse(result)
-                }else{
-                    toast.warning(`${projectData.title} updation failed due to some reason`,result.response.data)
+                } else {
+                    toast.warning(`${projectData.title} updation failed due to some reason`, result.response.data)
                 }
-
-                
-
-            }else{
-                const reqHeader={
-                    "Content-Type":"multipart/form-data",
-                    "Authorization":`Bearer ${token}`
+            } else {
+                const reqHeader = {
+                    "Content-Type": "multipart/form-data",
+                    "Authorization": `Bearer ${token}`
                 }
-                const result = await editProject(projectData.id,formData,reqHeader)
-                if(result.status==200){
+                const result = await editProject(projectData.id, formData, reqHeader)
+                if (result.status == 200) {
                     toast.success(`${projectData.title} updated successfully`)
                     handleClose()
                     setEditProjectResponse(result)
 
 
-                }else{
-                    toast.warning(`${projectData.title} updation failed due to some reason `,result.response.data)
+                } else {
+                    toast.warning(`${projectData.title} updation failed due to some reason `, result.response.data)
                 }
-
             }
-            
-
         }
     }
 
