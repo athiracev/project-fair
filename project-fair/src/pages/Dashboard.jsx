@@ -5,11 +5,12 @@ import Add from '../components/Add'
 import Edit from '../components/Edit'
 import Profile from '../components/Profile'
 import { userProjects } from '../services/allApis'
-import { addProjectResponseContext } from '../Context_Api/Contextapis'
+import { addProjectResponseContext, editProjectResponseContext } from '../Context_Api/Contextapis'
 
 function Dashboard() {
   
 const{addProjectResponse,setAddProjectResponse}=useContext(addProjectResponseContext)
+const{editProjectResponse,setEditProjectResponse}=useContext(editProjectResponseContext)
 
   const [user, setUser] = useState('')
   const [userpro, setUserPro] = useState([])
@@ -20,7 +21,7 @@ const{addProjectResponse,setAddProjectResponse}=useContext(addProjectResponseCon
     if(sessionStorage.getItem("token")){
       getUserProject()
     }
-  }, [addProjectResponse])
+  }, [addProjectResponse,editProjectResponse])
   // console.log(user)
 
 
@@ -40,6 +41,11 @@ const{addProjectResponse,setAddProjectResponse}=useContext(addProjectResponseCon
     }
   }
   // console.log(userpro,"userprojects")
+
+
+  const handleDelete= async(id)=>{
+    console.log("delete",id)
+  }
   
 
   return (
@@ -59,7 +65,7 @@ const{addProjectResponse,setAddProjectResponse}=useContext(addProjectResponseCon
            {
             userpro.length>0?
 
-           userpro?.map(item=>(
+           userpro.map(item=>(
                <div className='d-flex justify-content-between shadow mb-3 p-5 rounded'>
 
                <h4>{item.title}</h4>
@@ -69,7 +75,7 @@ const{addProjectResponse,setAddProjectResponse}=useContext(addProjectResponseCon
                  </a>
                  <Edit project={item} />
                  <button className='btn me-3'>
-                   <i className="fa-solid fa-trash" style={{ color: "#c3223b", }} />
+                   <i className="fa-solid fa-trash" style={{ color: "#c3223b", }}  onClick={handleDelete(item.id)}/>
 
                  </button>
                </div>
