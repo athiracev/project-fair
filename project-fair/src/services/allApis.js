@@ -50,3 +50,10 @@ export const userProjects = async (header) => {
 export const editProject= async(id,data,header)=>{
     return await commonApi('PUT',`${base_url}/edit-project/${id}`,data,header)
 }
+
+
+//delete-project
+
+export const deleteProject = async(id,header)=>{
+    return await commonApi('DELETE',`${base_url}/delete-project/${id}`,{},header)
+}

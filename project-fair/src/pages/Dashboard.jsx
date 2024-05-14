@@ -4,8 +4,9 @@ import { Row, Col } from 'react-bootstrap'
 import Add from '../components/Add'
 import Edit from '../components/Edit'
 import Profile from '../components/Profile'
-import { userProjects } from '../services/allApis'
+import { deleteProject, userProjects } from '../services/allApis'
 import { addProjectResponseContext, editProjectResponseContext } from '../Context_Api/Contextapis'
+import { toast } from 'react-toastify'
 
 function Dashboard() {
 
@@ -44,9 +45,20 @@ function Dashboard() {
 
 
   const handleDelete = async (id) => {
-    console.log("delete", id)
-  }
+    const token = sessionStorage.getItem('token')
+    const header = {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    }
+    
+    const result = await deleteProject(id, header)
+      if (result.status == 200) {
+        toast.success('Project deleted successfully')
+        getUserProject()
+      }
 
+
+  }
 
   return (
     <>
@@ -55,8 +67,9 @@ function Dashboard() {
         <Row>
           <Col sm={12} md={8} className='p-3'>
             <h3>My Projects</h3>
-            <h3 className='text-center text-success' >Hi <span >{user}</span>  Welcome Back</h3>
-            <i className="fa-duotone fa-face-smile" style={{ "--fa-primary-color": "#e1d123", "--fa-secondary-color": "#e1d123" }} />
+
+            <h3 className='text-center text-success' >Hi <span >{user}</span>  Welcome Back
+              <i className="fa-solid fa-face-smile d-flex align-items-center" style={{ color: '#FFD43B', marginRight: '300px' }}></i></h3>
 
             <div className='border border- p-4'>
               <Add />
@@ -74,7 +87,7 @@ function Dashboard() {
                           <i className="fa-brands fa-github" style={{ color: "#3b69ba", }} />
                         </a>
                         <Edit project={item} />
-                        <button className='btn me-3'>
+                        <button className='btn me-3' onClick={(e) => { handleDelete(item._id) }}>
                           <i className="fa-solid fa-trash" style={{ color: "#c3223b", }} onClick={handleDelete(item.id)} />
 
                         </button>

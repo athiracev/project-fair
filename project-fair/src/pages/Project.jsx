@@ -45,25 +45,29 @@ function Project() {
       <Header status={true} />
 
       <div className='p-5'>
-        <h1>All Projects</h1>
-        {logStatus?
-         <Row>
+        <div className="d-flex justify-content-between my-4">
+          <h1>All Projects</h1>
+          <input type='text' name='' className='form-control w-25' placeholder='Enter languages to serach project'></input>
 
-         {projects?.length > 0 ?
-         projects?.map(item=>(
-           <Col>
+        </div>
+        {logStatus ?
+          <Row>
 
-           <ProjectCart pro={item} />
-         </Col>
-         ))  
-         :
-          <h2>No project available</h2>
-         }
+            {projects?.length > 0 ?
+              projects?.map(item => (
+                <Col>
 
-       </Row>:
-       <h2 className='text-center text-warning'>Please login first</h2>
+                  <ProjectCart pro={item} />
+                </Col>
+              ))
+              :
+              <h2>No project available</h2>
+            }
+
+          </Row> :
+          <h2 className='text-center text-warning'>Please login first</h2>
         }
-       
+
 
       </div>
     </div>
