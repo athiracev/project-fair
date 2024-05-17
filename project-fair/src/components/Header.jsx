@@ -1,8 +1,28 @@
 import React from 'react'
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
+import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { TokenAuthContext } from '../Context_Api/AuthContext';
 
 function Header({status}) {
+
+  const{authStatus,setAuthStatus}=useContext(TokenAuthContext)
+
+
+  const navigate = useNavigate()
+  const handleLogout=()=>{
+    sessionStorage.removeItem('token')
+    sessionStorage.removeItem('username')
+    sessionStorage.removeItem('userDetails')
+    navigate('/')
+    setAuthStatus(false)
+    
+
+    
+  }
+
+
   return (
     <div>
      
@@ -17,8 +37,8 @@ function Header({status}) {
           <div>
             {!status && 
             
-            <button className='btn btn-outlined-danger'>
-            <i className="fa-solid fa-arrow-right-from-bracket" style={{color:'#d12b1f'}}></i>
+            <button className='btn btn-outlined-danger' onClick={handleLogout}>
+            <i className="fa-solid fa-arrow-right-from-bracket"  style={{color:'#d12b1f'}}></i>
             Logout
             </button>
             }

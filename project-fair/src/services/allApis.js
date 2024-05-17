@@ -33,8 +33,8 @@ export const homeProjects = async () => {
 
 //all projects
 
-export const allProjects = async (header) => {
-    return await commonApi("GET", `${base_url}/all-projects`, "", header)
+export const allProjects = async (header,search) => {
+    return await commonApi("GET", `${base_url}/all-projects?search=${search}`, "", header)
 
 }
 

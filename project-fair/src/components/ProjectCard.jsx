@@ -37,7 +37,7 @@ function ProjectCard({ pro }) {
                 <Modal.Body>
                     <Row>
                         <Col>
-                            <img src={pro?.image} style={{ width: '100%', height: '250px' }} className='img-fluid' alt="" /></Col>
+                            <img src={pro.image?`${server_url}/uploads/${pro.image}`:"https://www.biospace.com/getasset/6c76bbda-c6ff-4cb4-b34a-5bdd06aa1c61/"} style={{ width: '100%', height: '250px' }} className='img-fluid' alt="" /></Col>
                         <Col>
                             <h4>{pro?.title}</h4>
                             <p>{pro?.overview}</p>

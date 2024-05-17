@@ -6,10 +6,15 @@ import { toast } from 'react-toastify'
 import { userRegister,userLogin } from '../services/allApis';
 import {useNavigate} from 'react-router-dom'
 import ProjectCard from '../components/ProjectCard';
+import { useContext } from 'react';
+import { TokenAuthContext } from '../Context_Api/AuthContext';
 
 
 
 function Auth() {
+
+  const{authStatus,setAuthStatus}=useContext(TokenAuthContext)
+
 
     const [status, SetStatus] = useState(true)
     const navigate = useNavigate()
@@ -39,11 +44,11 @@ function Auth() {
                 toast.success("User Registration Successfull")
                 setData({username:"",password:"",email:""})
                 SetStatus(true)
+                setAuthStatus(true)
             }else{
                 toast.error(result.response.data)
+                
             }
-
-
 
         }
     }
@@ -61,6 +66,7 @@ function Auth() {
                 // console.log(result.data.username,"hhhh")
                 sessionStorage.setItem("token",result.data.token)
                 sessionStorage.setItem("username",result.data.username)
+                sessionStorage.setItem('userDetails',JSON.stringify(result.data.userDetails))
                 toast.success("Login Success")
                 navigate('/')
             }else{
